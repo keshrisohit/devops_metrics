@@ -1,0 +1,65 @@
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+  - serverless-plugin-tracing
+  - serverless-prune-plugin
+
+service: dev_metrics
+provider:
+  name: aws
+  runtime: python3.6
+  description: offchain information of organizations and services
+  memorySize: 512
+  timeout: 30
+  region: ${file(./config.${self:provider.stage}.json):REGION}
+  stage: ${opt:stage,'dev'}
+  deploymentBucket:
+    name: snet-serverless-artifacts
+    serverSideEncryption: AES256
+    tags:
+      key1: registry
+    deploymentPrefix: serverless
+    tracing: true
+
+custom:
+  pythonRequirements:
+    fileName: requirement.txt
+    dockerizePip: true
+    useDownloadCache: true
+    useStaticCache: true
+    cacheLocation: "/var/cache/serverless"
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 5
+
+package:
+  exclude:
+    - .circleci/**
+    - .gitignore/**
+    - .serverless/**
+    - requirement.txt
+    - venv/**
+    - package.json
+    - Dockerfile
+    - License
+
+functions:
+  post_pull_request_event:
+    handler: application.handlers.pull_request_service.github_pull_request_service
+    role: ${file(./config.${self:provider.stage}.json):ROLE}
+    vpc:
+      securityGroupIds:
+        - ${file(./config.${self:provider.stage}.json):SG1}
+        - ${file(./config.${self:provider.stage}.json):SG2}
+      subnetIds:
+        - ${file(./config.${self:provider.stage}.json):VPC1}
+        - ${file(./config.${self:provider.stage}.json):VPC2}
+    events:
+      - http:
+          method: POST
+          path: /pull_request
+
+
+
+
