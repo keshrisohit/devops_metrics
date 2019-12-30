@@ -13,7 +13,7 @@ def string_to_datetime(str_time):
     return None
 
 
-def set_pull_request_db_from_entity(pull_request_db, pull_request):
+def set_pull_request_db_from_entity(pull_request_db, pull_request,created_at,updated_at):
     pull_request_db.lines_added = pull_request.lines_added
     pull_request_db.commits_url = pull_request.commits_url
     pull_request_db.lines_removed = pull_request.lines_removed
@@ -33,13 +33,13 @@ def set_pull_request_db_from_entity(pull_request_db, pull_request):
     pull_request_db.title = pull_request.title
     pull_request_db.repository_url = pull_request.repository_url
     pull_request_db.pull_request_id = pull_request.pull_request_id
-    pull_request_db.row_created_at = datetime.now()
-    pull_request_db.row_updated_at = datetime.now()
+    pull_request_db.row_created_at = created_at
+    pull_request_db.row_updated_at = updated_at
 
 
 def pull_request_entities_to_model(pull_request):
     pull_request_db = PullRequest()
-    set_pull_request_db_from_entity(pull_request_db, pull_request)
+    set_pull_request_db_from_entity(pull_request_db, pull_request,datetime.now(),datetime.now())
 
     return pull_request_db
 
