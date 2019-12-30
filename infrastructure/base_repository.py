@@ -8,7 +8,7 @@ from infrastructure.models import Base
 
 
 DB_URL = os.getenv('DB_URL', 'sqlite:///dev_metrics.db')
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL, echo=False)
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
