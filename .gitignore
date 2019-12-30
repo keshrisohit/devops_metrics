@@ -131,4 +131,7 @@ dmypy.json
 .serverless/**
 
 .idea/**
-
+venv/**
+config.*.json
+__pycache__/**
+codealike.json

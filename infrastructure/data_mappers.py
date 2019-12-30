@@ -1,10 +1,11 @@
-from xmlrpc.client import _iso8601_format
-
-from infrastructure.models import PullRequest, PullRequestBranchAssociation, PullRequestCommitAssociation, Commit, \
-    Branch
 from datetime import datetime
+
 import iso8601
 
+from infrastructure.models import Branch, Commit, PullRequest
+
+
+# TODO fix  created_at . updated_at issue
 
 def string_to_datetime(str_time):
     if str_time:

@@ -1,5 +1,6 @@
-from domain.entities import PullRequest, Branch, Commit
 import requests
+
+from domain.entities import Branch, Commit, PullRequest
 
 
 class EventFactory(object):

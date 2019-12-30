@@ -192,3 +192,13 @@ class Commit(object):
 class BuildDetails(object):
     def __init__(self):
         pass
+
+
+class Issue(object):
+    def __init__(self):
+        self.__start_time = ""
+        self.__end_time = ""
+        self.__title = ""
+        self.__description = ""
+        self.__sev = ""
+        self.__reported_by = ""

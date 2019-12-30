@@ -4,7 +4,9 @@ plugins:
   - serverless-plugin-tracing
   - serverless-prune-plugin
 
-service: dev_metrics
+
+#config.{stage-name}.json will contain all the configs paramterized here
+service: dev-metrics
 provider:
   name: aws
   runtime: python3.6
@@ -20,6 +22,14 @@ provider:
       key1: registry
     deploymentPrefix: serverless
     tracing: true
+  usagePlan: # Optional usage plan configuration
+    quota:
+      limit: 5000
+      offset: 1
+      period: WEEK
+    throttle:
+      burstLimit: 50
+      rateLimit: 50
 
 custom:
   pythonRequirements:

@@ -472,7 +472,7 @@ class TestOrganizationService(unittest.TestCase):
                                                                    pull_request.repository_url)
 
 
-        #TODO Add more assertions
+        #TODO Add more assertions and mock commit url call
         assert pull_request_db[0].action == 'opened'
         assert pull_request_db[0].branches[0].branch.name == 'changes'
         assert len(pull_request_db[0].branches) == 2
