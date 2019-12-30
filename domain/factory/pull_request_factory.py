@@ -38,7 +38,6 @@ class GitHubPullRequestFactory(EventFactory):
         if action == "closed" and event["pull_request"]["merged"]:
             action == "merged"
 
-
         pull_request = PullRequest(repository_url, pull_request_id, commits, source_branch, target_branch, title,
                                    reviewers, sender_name, sender_id, action, commits_url, merged_at, created_at,
                                    updated_at, closed_at, merge_commit_sha, review_comments, no_of_commits,
