@@ -33,7 +33,7 @@ provider:
 
 custom:
   pythonRequirements:
-    fileName: requirement.txt
+    fileName: requirements.txt
     dockerizePip: true
     useDownloadCache: true
     useStaticCache: true

@@ -7,7 +7,7 @@ from infrastructure.models import Base
 # sample DB_URL 'mysql+pymysql://unittest_root:unittest_pwd@localhost/dev_metrics'
 
 
-DB_URL = os.getenv('DB_URL', 'sqlite:///dev_metrics.db')
+DB_URL = os.getenv('DB_URL', 'mysql+pymysql://marketplace_mainnet_writer:2m3ark3e2tplc_i2n@snet-mps-db.c13eaekk3fgz.us-east-1.rds.amazonaws.com/metrics')
 engine = create_engine(DB_URL, echo=True)
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)

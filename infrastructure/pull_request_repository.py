@@ -34,7 +34,8 @@ class PullRequestRepository(BaseRepository):
             if len(commit_db) > 0:
                 set_commit_db_from_entity(commit_db[0], commit)
             else:
-                pull_request_db.commits.append(commit_entites_to_model(commit))
+                pull_request_db[0].commits.append(commit_entites_to_model(commit))
+        pull_request_db[0].row_updated_at = datetime.now()
 
     def create_pull_request(self, pull_request):
         pull_request_db = pull_request_entities_to_model(pull_request)
