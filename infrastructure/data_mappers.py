@@ -50,7 +50,7 @@ def set_commit_db_from_entity(commit_db, commit):
     commit_db.message = commit.message
     commit_db.commiter_username = commit.commiter
     commit_db.commiter_user_id = commit.commiter_id
-    commit_db.time = commit.commit_time
+    commit_db.time = string_to_datetime(commit.commit_time)
     commit_db.repository_url = commit.repository_url
     commit_db.row_created_at = datetime.now()
     commit_db.row_updated_at = datetime.now()
