@@ -44,10 +44,19 @@ class PullRequestRepository(BaseRepository):
     def create_pull_request(self, pull_request):
         pull_request_db = pull_request_entities_to_model(pull_request)
 
-        source_branch = branch_entites_to_model(pull_request.source_branch)
-        target_branch = branch_entites_to_model(pull_request.target_branch)
+        source_branch = self.session.query(Branch).filter(Branch.name == pull_request.source_branch.branch_name).filter(
+            Branch.repository_url == pull_request.source_branch.repository_url).all()
+        target_branch = self.session.query(Branch).filter(Branch.name == pull_request.target_branch.branch_name).filter(
+            Branch.repository_url == pull_request.target_branch.repository_url).all()
+        if len(source_branch) > 0:
+            set_branch_db_from_entity(source_branch[0], pull_request.source_branch)
+        else:
+            source_branch = branch_entites_to_model(pull_request.source_branch)
+        if len(target_branch) > 0:
+            set_branch_db_from_entity(target_branch[0], pull_request.target_branch)
+        else:
+            target_branch = branch_entites_to_model(pull_request.target_branch)
 
-        pull_request_commit_associations = []
         for commit in pull_request.commits:
             commit_db = commit_entites_to_model(commit)
             pull_request_commit_association = PullRequestCommitAssociation()
