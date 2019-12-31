@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from infrastructure.base_repository import BaseRepository
-from infrastructure.data_mappers import pull_request_entities_to_model, set_branch_db_from_entity, \
-    set_commit_db_from_entity, commit_entites_to_model, branch_entites_to_model, set_pull_request_db_from_entity
-from infrastructure.models import PullRequest, Branch, Commit, PullRequestCommitAssociation, \
-    PullRequestBranchAssociation
+from infrastructure.data_mappers import branch_entites_to_model, commit_entites_to_model, \
+    pull_request_entities_to_model, set_branch_db_from_entity, set_commit_db_from_entity, \
+    set_pull_request_db_from_entity
+from infrastructure.models import Branch, Commit, PullRequest, PullRequestBranchAssociation, \
+    PullRequestCommitAssociation
 
 
 class PullRequestRepository(BaseRepository):
@@ -35,7 +36,10 @@ class PullRequestRepository(BaseRepository):
                 set_commit_db_from_entity(commit_db[0], commit)
             else:
                 pull_request_db[0].commits.append(commit_entites_to_model(commit))
-        pull_request_db[0].row_updated_at = datetime.now()
+
+        set_pull_request_db_from_entity(pull_request_db[0], pull_request, pull_request_db[0].row_created_at,
+                                        datetime.now())
+
 
     def create_pull_request(self, pull_request):
         pull_request_db = pull_request_entities_to_model(pull_request)
