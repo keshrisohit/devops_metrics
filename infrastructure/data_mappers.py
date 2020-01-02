@@ -2,7 +2,7 @@ from datetime import datetime
 
 import iso8601
 
-from infrastructure.models import Branch, Commit, PullRequest
+from infrastructure.models import Branch, Commit, PullRequest, BuildDetails
 
 
 # TODO fix  created_at . updated_at issue
@@ -78,3 +78,17 @@ def branch_entites_to_model(branch):
     branch_db = Branch()
     set_branch_db_from_entity(branch_db, branch)
     return branch_db
+
+def set_build_metrics_db_from_entity(build_details,build_metrics):
+    build_details.build_id = build_metrics.build_id
+    build_details.project_name = build_metrics.project_name
+    build_details.source_type = build_metrics.source_type
+    build_details.source_location = build_metrics.source_location
+    build_details.branch_name = build_metrics.branch_name
+    build_details.commit_id = build_metrics.commit_id
+    build_details.start_time = build_metrics.start_time
+    build_details.end_time = build_metrics.end_time
+
+def build_details_entities_to_model(build_metrics):
+    build_details = BuildDetails(build_metrics)
+    return set_build_metrics_db_from_entity(build_details,build_metrics)

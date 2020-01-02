@@ -190,8 +190,48 @@ class Commit(object):
 
 
 class BuildDetails(object):
-    def __init__(self):
-        pass
+    def __init__(self,build_id, project_name, source_type, source_location,
+                 branch_name, commit_id, start_time, end_time):
+        self.__build_id = build_id
+        self.__project_name = project_name
+        self.__source_type = source_type
+        self.__source_location = source_location
+        self.__branch_name = branch_name
+        self.__commit_id = commit_id
+        self.__start_time = start_time
+        self.__end_time = end_time
+
+    @property
+    def build_id(self):
+        return self.__build_id
+
+    @property
+    def project_name(self):
+        return self.__project_name
+
+    @property
+    def source_type(self):
+        return self.__source_type
+
+    @property
+    def source_location(self):
+        return self.__source_location
+
+    @property
+    def branch_name(self):
+        return self.__branch_name
+
+    @property
+    def commit_id(self):
+        return self.__commit_id
+
+    @property
+    def start_time(self):
+        return self.__start_time
+
+    @property
+    def end_time(self):
+        return self.__end_time
 
 
 class Issue(object):
