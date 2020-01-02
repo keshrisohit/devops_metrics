@@ -40,7 +40,6 @@ class PullRequestRepository(BaseRepository):
         set_pull_request_db_from_entity(pull_request_db[0], pull_request, pull_request_db[0].row_created_at,
                                         datetime.now())
 
-
     def create_pull_request(self, pull_request):
         pull_request_db = pull_request_entities_to_model(pull_request)
 
@@ -50,10 +49,12 @@ class PullRequestRepository(BaseRepository):
             Branch.repository_url == pull_request.target_branch.repository_url).all()
         if len(source_branch) > 0:
             set_branch_db_from_entity(source_branch[0], pull_request.source_branch)
+            source_branch = source_branch[0]
         else:
             source_branch = branch_entites_to_model(pull_request.source_branch)
         if len(target_branch) > 0:
             set_branch_db_from_entity(target_branch[0], pull_request.target_branch)
+            target_branch = target_branch[0]
         else:
             target_branch = branch_entites_to_model(pull_request.target_branch)
 

@@ -61,7 +61,7 @@ class Commit(Base):
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     sha_id = Column("sha_id", VARCHAR(128), nullable=False)
-    time = Column("time", VARCHAR(128), nullable=False)
+    time = Column("time",TIMESTAMP(timezone=False), nullable=False)
     commiter_username = Column("commiter_username", VARCHAR(128), nullable=False)
     commiter_user_id = Column("commiter_user_id", VARCHAR(128), nullable=False)
     description = Column("description", VARCHAR(128), nullable=False)
