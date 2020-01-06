@@ -41,6 +41,7 @@ class GitHubPullRequestFactory(EventFactory):
         commits_url = event["pull_request"]["commits_url"]
 
         review_comments = event["pull_request"]["review_comments"]
+        comments=event["pull_request"]["comments"]
         no_of_commits = event["pull_request"]["commits"]
         no_of_files_changed = event["pull_request"]["changed_files"]
         lines_added = event["pull_request"]["additions"]
@@ -58,7 +59,7 @@ class GitHubPullRequestFactory(EventFactory):
 
         pull_request = PullRequest(repository_url, pull_request_id, commits, source_branch, target_branch, title,
                                    participants, sender_username, sender_id, action, commits_url, merged_at, created_at,
-                                   updated_at, closed_at, merge_commit_sha, review_comments, no_of_commits,
+                                   updated_at, closed_at, merge_commit_sha, review_comments, comments,no_of_commits,
                                    no_of_files_changed, lines_added, lines_removed)
 
         return pull_request

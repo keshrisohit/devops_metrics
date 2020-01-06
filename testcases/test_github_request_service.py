@@ -2,7 +2,6 @@ import unittest
 
 from domain.factory.pull_request_factory import GitHubPullRequestFactory
 from domain.github import GithubClient
-
 from infrastructure.pull_request_repository import PullRequestRepository
 
 
@@ -467,22 +466,18 @@ class TestOrganizationService(unittest.TestCase):
             }
         }
 
-        github_client=GithubClient()
+        github_client = GithubClient()
         pull_request = GitHubPullRequestFactory(github_client).create_pull_request(pull_request_webhooh_payload)
         self.pull_request_repo.save_or_update_pull_request(pull_request)
         pull_request_db = self.pull_request_repo.get_pull_requests(pull_request.pull_request_id,
                                                                    pull_request.repository_url)
 
-
-        #TODO Add more assertions and mock commit url call
+        # TODO Add more assertions and mock commit url call
         assert pull_request_db[0].action == 'closed'
         assert pull_request_db[0].branches[0].branch.name == 'changes'
         assert len(pull_request_db[0].branches) == 2
         assert len(pull_request_db[0].commits) == 1
         assert pull_request_db[0].commits[0].commit.sha_id == 'ec26c3e57ca3a959ca5aad62de7213c562f8c821'
-
-
-
 
 
 if __name__ == '__main__':
