@@ -25,4 +25,4 @@ def github_pull_request_service(event, context):
         return make_response(200, "OK", {'Content-Type': 'application/json'})
     except Exception as e:
         print(traceback)
-        return make_response(200, str(e), {'Content-Type': 'application/json'})
+        return make_response(500, str(e), {'Content-Type': 'application/json'})

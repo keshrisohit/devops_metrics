@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, VARCHAR, ForeignKey, Table, UniqueConstraint
-from sqlalchemy.dialects.mysql import JSON, TIMESTAMP
+from sqlalchemy import BOOLEAN, Column, ForeignKey, Integer, String, UniqueConstraint, VARCHAR
+from sqlalchemy.dialects.mysql import TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -7,23 +7,23 @@ Base = declarative_base()
 
 
 # Many to Many relationship between branch and pull request
-class PullRequestBranchAssociation(Base):
+class PullRequestBranchAssociationDBModel(Base):
     __tablename__ = 'pull_request_branch_association'
     pull_request_id = Column(Integer, ForeignKey('pull_request.id'), primary_key=True)
     branch_id = Column(Integer, ForeignKey('branch.id'), primary_key=True)
     branch_type = Column(VARCHAR(128))  # Source branch or target branch
-    branch = relationship("Branch")
+    branch = relationship("BranchDBModel")
 
 
 # Many to many relationship between branc and commit
-class PullRequestCommitAssociation(Base):
+class PullRequestCommitAssociationDBModel(Base):
     __tablename__ = 'pull_request_commit_association'
     pull_request_id = Column(Integer, ForeignKey('pull_request.id'), primary_key=True)
     commit_id = Column(Integer, ForeignKey('commit.id'), primary_key=True)
-    commit = relationship("Commit")
+    commit = relationship("CommitDBModel")
 
 
-class PullRequest(Base):
+class PullRequestDBModel(Base):
     __tablename__ = "pull_request"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
@@ -39,6 +39,7 @@ class PullRequest(Base):
     merge_commit_sha = Column("merge_commit_sha", VARCHAR(255))
     no_of_review_comments = Column("no_of_review_comments", Integer)
     no_of_commits = Column("no_of_commits", Integer)
+    no_of_files_changed = Column("no_of_files_changed", Integer)
     lines_added = Column("lines_added", Integer)
     lines_removed = Column("lines_removed", Integer)
     row_created_at = Column("row_created_at", TIMESTAMP(timezone=False))
@@ -50,18 +51,19 @@ class PullRequest(Base):
     row_updated_at = Column("row_updated_at", TIMESTAMP(timezone=False))
 
     # many  to many relationship
-    branches = relationship("PullRequestBranchAssociation")
-    commits = relationship("PullRequestCommitAssociation")
+    branches = relationship("PullRequestBranchAssociationDBModel")
+    commits = relationship("PullRequestCommitAssociationDBModel")
+    participants = relationship("PullRequestParticipantDBModel")
 
     __table_args__ = (UniqueConstraint('repository_url', 'pull_request_id', name='repo_pull_request_id_unique_key'),)
 
 
-class Commit(Base):
+class CommitDBModel(Base):
     __tablename__ = "commit"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     sha_id = Column("sha_id", VARCHAR(128), nullable=False)
-    time = Column("time",TIMESTAMP(timezone=False), nullable=False)
+    time = Column("time", TIMESTAMP(timezone=False), nullable=False)
     commiter_username = Column("commiter_username", VARCHAR(128), nullable=False)
     commiter_user_id = Column("commiter_user_id", VARCHAR(128), nullable=False)
     description = Column("description", VARCHAR(128), nullable=False)
@@ -72,7 +74,8 @@ class Commit(Base):
 
     __table_args__ = (UniqueConstraint('repository_url', 'sha_id', name='commit_sha_unique_key'),)
 
-class Branch(Base):
+
+class BranchDBModel(Base):
     __tablename__ = "branch"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     name = Column("name", VARCHAR(128), nullable=False)
@@ -80,7 +83,7 @@ class Branch(Base):
     sha_id = Column("sha_id", VARCHAR(128), nullable=False)
     username = Column("username", VARCHAR(128), nullable=False)
     user_id = Column("user_id", VARCHAR(128), nullable=False)
-    repository_url=  Column("repository_url", VARCHAR(128), nullable=False)
+    repository_url = Column("repository_url", VARCHAR(128), nullable=False)
     row_created_at = Column("row_created_at", TIMESTAMP(timezone=False))
     row_updated_at = Column("row_updated_at", TIMESTAMP(timezone=False))
 
@@ -105,3 +108,16 @@ class BuildDetails(object):
     commit_id = Column("commit_id", VARCHAR(128), nullable=False)
     start_time = Column("start_time", VARCHAR(128), nullable=False)
     end_time = Column("end_time", VARCHAR(128), nullable=False)
+class PullRequestParticipantDBModel(Base):
+    __tablename__ = "pull_request_participant"
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    username = Column('username', String)
+    display_name = Column('display_name', String)
+    role = Column('role', String)
+    participated_on = Column('participated_on', TIMESTAMP(timezone=False),
+                             nullable=True)  # if patricipated in PR review
+    approved = Column('approved', BOOLEAN)  # true  if PR is approved
+
+    pull_request_id = Column(Integer, ForeignKey('pull_request.id'))
+
+    __table_args__ = (UniqueConstraint('username', 'role', 'pull_request_id', name='participants_unique_key'),)
