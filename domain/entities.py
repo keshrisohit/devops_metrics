@@ -1,14 +1,14 @@
 class PullRequest(object):
-    def __init__(self, repository_url, pull_request_id, commits, source_branch, target_branch, title, reviewers,
+    def __init__(self, repository_url, pull_request_id, commits, source_branch, target_branch, title, participants,
                  sender_username, sender_id, action, commits_url, merged_at, created_at, updated_at, closed_at,
-                 merge_commit_sha, review_comments, no_of_commits, no_of_files_changed, lines_added, lines_removed):
+                 merge_commit_sha, review_comments, no_of_commits, no_of_files_changed, lines_added, lines_removed,description=""):
         self.__repository_url = repository_url
         self.__pull_request_id = pull_request_id
         self.__commits = commits
         self.__source_branch = source_branch
         self.__target_branch = target_branch
         self.__title = title
-        self.__reviewers = reviewers
+        self.__participants = participants
         self.__sender_username = sender_username
         self.__sender_id = sender_id
         self.__action = action
@@ -25,6 +25,8 @@ class PullRequest(object):
         self.__no_of_files_changed = no_of_files_changed
         self.__lines_added = lines_added
         self.__lines_removed = lines_removed
+        self.__description=description
+        #self.__merged_by
 
     @property
     def repository_url(self):
@@ -51,8 +53,8 @@ class PullRequest(object):
         return self.__title
 
     @property
-    def reviewers(self):
-        return self.__reviewers
+    def participants(self):
+        return self.__participants
 
     @property
     def sender_username(self):
@@ -113,6 +115,44 @@ class PullRequest(object):
     @property
     def lines_removed(self):
         return self.__lines_removed
+    @property
+    def description(self):
+        return self.__description
+
+
+class PullRequestParticipant(object):
+
+    def __init__(self,  username=None,
+                 user_id=None, role=None, participated_on=None,
+                 approved=None):
+
+        self.__username = username
+        self.__user_id = user_id
+        self.__role = role
+        self.__participated_on = participated_on
+        self.__approved = approved
+
+
+    @property
+    def username(self):
+        return self.__username
+
+    @property
+    def user_id(self):
+        return self.__user_id
+
+    @property
+    def role(self):
+        return self.__role
+
+    @property
+    def participated_on(self):
+        return self.__participated_on
+
+    @property
+    def approved(self):
+        return self.__approved
+
 
 
 class Branch(object):

@@ -2,7 +2,7 @@ from datetime import datetime
 
 import iso8601
 
-from infrastructure.models import Branch, Commit, PullRequest
+from infrastructure.models import BranchDBModel, CommitDBModel, PullRequestDBModel, PullRequestParticipantDBModel
 
 
 # TODO fix  created_at . updated_at issue
@@ -13,13 +13,14 @@ def string_to_datetime(str_time):
     return None
 
 
-def set_pull_request_db_from_entity(pull_request_db, pull_request,created_at,updated_at):
+def set_pull_request_db_from_entity(pull_request_db, pull_request, created_at, updated_at):
     pull_request_db.lines_added = pull_request.lines_added
     pull_request_db.commits_url = pull_request.commits_url
     pull_request_db.lines_removed = pull_request.lines_removed
     pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.no_of_commits = pull_request.no_of_commits
     pull_request_db.review_comments = pull_request.review_comments
+    pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.merge_commit_sha = pull_request.merge_commit_sha
 
     pull_request_db.closed_at = string_to_datetime(pull_request.closed_at)
@@ -38,8 +39,8 @@ def set_pull_request_db_from_entity(pull_request_db, pull_request,created_at,upd
 
 
 def pull_request_entities_to_model(pull_request):
-    pull_request_db = PullRequest()
-    set_pull_request_db_from_entity(pull_request_db, pull_request,datetime.now(),datetime.now())
+    pull_request_db = PullRequestDBModel()
+    set_pull_request_db_from_entity(pull_request_db, pull_request, datetime.now(), datetime.now())
 
     return pull_request_db
 
@@ -57,7 +58,7 @@ def set_commit_db_from_entity(commit_db, commit):
 
 
 def commit_entites_to_model(commit):
-    commit_db = Commit()
+    commit_db = CommitDBModel()
     set_commit_db_from_entity(commit_db, commit)
     return commit_db
 
@@ -75,6 +76,23 @@ def set_branch_db_from_entity(branch_db, branch):
 
 
 def branch_entites_to_model(branch):
-    branch_db = Branch()
+    branch_db = BranchDBModel()
     set_branch_db_from_entity(branch_db, branch)
     return branch_db
+
+
+def set_pull_request_participant_db_from_entity(pull_request_participant_db, pull_request_participant):
+    pull_request_participant_db.display_name = pull_request_participant.username
+    pull_request_participant_db.approved = pull_request_participant.approved
+    pull_request_participant_db.participated_on = string_to_datetime(pull_request_participant.participated_on)
+    pull_request_participant_db.role = pull_request_participant.role
+    pull_request_participant_db.username = pull_request_participant.user_id
+
+    return pull_request_participant
+
+
+def pull_request_particpants_entity_to_model(pull_request_participant):
+    pull_request_participant_db = PullRequestParticipantDBModel()
+    set_pull_request_participant_db_from_entity(pull_request_participant_db, pull_request_participant)
+
+    return pull_request_participant_db
