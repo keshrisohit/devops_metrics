@@ -13,7 +13,7 @@ class CodeBuildFactory(DeploymentFactory):
         project_name = metrics.get('builds', {})[0].get('projectName')
         source_type = metrics.get('builds', {})[0].get('source').get('type')
         source_location = metrics.get('builds', {})[0].get('source').get('location')
-        branch_name = metrics.get('builds', {})[0].get('resolvedSource')
+        branch_name = metrics.get('builds', {})[0].get('sourceVersion')
         commit_id = metrics.get('builds', {})[0].get('resolvedSourceVersion')
         start_time = metrics.get('builds', {})[0].get('startTime')
         end_time = metrics.get('builds', {})[0].get('endTime')

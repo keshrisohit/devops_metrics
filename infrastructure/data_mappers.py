@@ -95,8 +95,9 @@ def set_build_metrics_db_from_entity(build_details, build_metrics):
 
 
 def build_details_entities_to_model(build_metrics):
-    build_details = BuildDetailsModels(build_metrics)
-    return set_build_metrics_db_from_entity(build_details, build_metrics)
+    build_details = BuildDetailsModels()
+    set_build_metrics_db_from_entity(build_details, build_metrics)
+    return build_details
 
 
 def set_pull_request_participant_db_from_entity(pull_request_participant_db, pull_request_participant):
