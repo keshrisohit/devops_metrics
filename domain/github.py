@@ -16,6 +16,9 @@ class GithubClient(object):
                                             self.access_token)}).json()
 
         else:
-            reposne = requests.get(commit_url).json()
+            try:
+                reposne = requests.get(commit_url).json()
+            except Exception as e:
+                raise e
 
         return reposne

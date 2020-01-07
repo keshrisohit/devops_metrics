@@ -38,6 +38,7 @@ class PullRequestDBModel(Base):
     closed_at = Column("closed_at", TIMESTAMP(timezone=False), nullable=True)
     merge_commit_sha = Column("merge_commit_sha", VARCHAR(255))
     no_of_review_comments = Column("no_of_review_comments", Integer)
+    no_of_comments = Column("no_of_comments", Integer)
     no_of_commits = Column("no_of_commits", Integer)
     no_of_files_changed = Column("no_of_files_changed", Integer)
     lines_added = Column("lines_added", Integer)
@@ -90,16 +91,9 @@ class BranchDBModel(Base):
     __table_args__ = (UniqueConstraint('repository_url', 'name', name='branch_name_unique_key'),)
 
 
-class BuildHistory(object):
-    __tablename__ = "build_history"
-    build_id = Column("branch_label", VARCHAR(128), nullable=False)
-    repo_url = Column("branch_label", VARCHAR(128), nullable=False)
-    status = Column("branch_label", VARCHAR(128), nullable=False)
-    commit_id = Column("branch_label", VARCHAR(128), nullable=False)
-    branch = Column("branch_label", VARCHAR(128), nullable=False)
-
-class BuildDetails(object):
-    __tablename__ = "build_metrics"
+class BuildDetailsModels(Base):
+    __tablename__ = "build_details"
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
     build_id = Column("build_id", VARCHAR(128), nullable=False)
     project_name = Column("project_name", VARCHAR(128), nullable=False)
     source_type = Column("source_type", VARCHAR(128), nullable=False)
@@ -108,6 +102,10 @@ class BuildDetails(object):
     commit_id = Column("commit_id", VARCHAR(128), nullable=False)
     start_time = Column("start_time", VARCHAR(128), nullable=False)
     end_time = Column("end_time", VARCHAR(128), nullable=False)
+
+    __table_args__ = (UniqueConstraint('build_id', 'project_name', 'source_type', name='build_details_unique_key'),)
+
+
 class PullRequestParticipantDBModel(Base):
     __tablename__ = "pull_request_participant"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
@@ -120,4 +118,4 @@ class PullRequestParticipantDBModel(Base):
 
     pull_request_id = Column(Integer, ForeignKey('pull_request.id'))
 
-    __table_args__ = (UniqueConstraint('username', 'role', 'pull_request_id', name='participants_unique_key'),)
+

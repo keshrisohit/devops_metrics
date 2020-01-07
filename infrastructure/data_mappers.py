@@ -2,7 +2,8 @@ from datetime import datetime
 
 import iso8601
 
-from infrastructure.models import BranchDBModel, CommitDBModel, PullRequestDBModel, PullRequestParticipantDBModel
+from infrastructure.models import BranchDBModel, BuildDetailsModels, CommitDBModel, PullRequestDBModel, \
+    PullRequestParticipantDBModel
 
 
 # TODO fix  created_at . updated_at issue
@@ -19,7 +20,8 @@ def set_pull_request_db_from_entity(pull_request_db, pull_request, created_at, u
     pull_request_db.lines_removed = pull_request.lines_removed
     pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.no_of_commits = pull_request.no_of_commits
-    pull_request_db.review_comments = pull_request.review_comments
+    pull_request_db.no_of_review_comments = pull_request.review_comments
+    pull_request_db.no_of_comments = pull_request.comments
     pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.merge_commit_sha = pull_request.merge_commit_sha
 
@@ -80,7 +82,8 @@ def branch_entites_to_model(branch):
     set_branch_db_from_entity(branch_db, branch)
     return branch_db
 
-def set_build_metrics_db_from_entity(build_details,build_metrics):
+
+def set_build_metrics_db_from_entity(build_details, build_metrics):
     build_details.build_id = build_metrics.build_id
     build_details.project_name = build_metrics.project_name
     build_details.source_type = build_metrics.source_type
@@ -90,9 +93,11 @@ def set_build_metrics_db_from_entity(build_details,build_metrics):
     build_details.start_time = build_metrics.start_time
     build_details.end_time = build_metrics.end_time
 
+
 def build_details_entities_to_model(build_metrics):
-    build_details = BuildDetails(build_metrics)
-    return set_build_metrics_db_from_entity(build_details,build_metrics)
+    build_details = BuildDetailsModels(build_metrics)
+    return set_build_metrics_db_from_entity(build_details, build_metrics)
+
 
 def set_pull_request_participant_db_from_entity(pull_request_participant_db, pull_request_participant):
     pull_request_participant_db.display_name = pull_request_participant.username

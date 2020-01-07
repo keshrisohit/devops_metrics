@@ -1,6 +1,6 @@
 from infrastructure.base_repository import BaseRepository
 from infrastructure.data_mappers import build_details_entities_to_model
-from infrastructure.models import BuildDetails
+
 
 class DeploymentRepository(BaseRepository):
     def save_build_metrics(self, build_metrics):
