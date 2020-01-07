@@ -1,7 +1,7 @@
 import unittest
 
 from domain.factory.pull_request_factory import GitHubPullRequestFactory
-
+from domain.github import GithubClient
 from infrastructure.pull_request_repository import PullRequestRepository
 
 
@@ -12,7 +12,7 @@ class TestOrganizationService(unittest.TestCase):
 
     def test_github_pull_request_parser(self):
         pull_request_webhooh_payload = {
-            "action": "opened",
+            "action": "closed",
             "number": 4,
             "pull_request": {
                 "url": "https://api.github.com/repos/Codertocat/Hello-World/pulls/2",
@@ -337,7 +337,7 @@ class TestOrganizationService(unittest.TestCase):
                 },
                 "author_association": "OWNER",
                 "draft": False,
-                "merged": False,
+                "merged": True,
                 "mergeable": None,
                 "rebaseable": None,
                 "mergeable_state": "unknown",
@@ -466,14 +466,14 @@ class TestOrganizationService(unittest.TestCase):
             }
         }
 
-        pull_request = GitHubPullRequestFactory().create_pull_request(pull_request_webhooh_payload)
+        github_client = GithubClient()
+        pull_request = GitHubPullRequestFactory(github_client).create_pull_request(pull_request_webhooh_payload)
         self.pull_request_repo.save_or_update_pull_request(pull_request)
         pull_request_db = self.pull_request_repo.get_pull_requests(pull_request.pull_request_id,
                                                                    pull_request.repository_url)
 
-
-        #TODO Add more assertions and mock commit url call
-        assert pull_request_db[0].action == 'opened'
+        # TODO Add more assertions and mock commit url call
+        assert pull_request_db[0].action == 'closed'
         assert pull_request_db[0].branches[0].branch.name == 'changes'
         assert len(pull_request_db[0].branches) == 2
         assert len(pull_request_db[0].commits) == 1

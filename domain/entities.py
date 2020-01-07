@@ -1,14 +1,15 @@
 class PullRequest(object):
-    def __init__(self, repository_url, pull_request_id, commits, source_branch, target_branch, title, reviewers,
+    def __init__(self, repository_url, pull_request_id, commits, source_branch, target_branch, title, participants,
                  sender_username, sender_id, action, commits_url, merged_at, created_at, updated_at, closed_at,
-                 merge_commit_sha, review_comments, no_of_commits, no_of_files_changed, lines_added, lines_removed):
+                 merge_commit_sha, review_comments, comments, no_of_commits, no_of_files_changed, lines_added,
+                 lines_removed, description=""):
         self.__repository_url = repository_url
         self.__pull_request_id = pull_request_id
         self.__commits = commits
         self.__source_branch = source_branch
         self.__target_branch = target_branch
         self.__title = title
-        self.__reviewers = reviewers
+        self.__participants = participants
         self.__sender_username = sender_username
         self.__sender_id = sender_id
         self.__action = action
@@ -25,6 +26,9 @@ class PullRequest(object):
         self.__no_of_files_changed = no_of_files_changed
         self.__lines_added = lines_added
         self.__lines_removed = lines_removed
+        self.__description = description
+        self.__comments = comments
+        # self.__merged_by
 
     @property
     def repository_url(self):
@@ -51,8 +55,8 @@ class PullRequest(object):
         return self.__title
 
     @property
-    def reviewers(self):
-        return self.__reviewers
+    def participants(self):
+        return self.__participants
 
     @property
     def sender_username(self):
@@ -113,6 +117,49 @@ class PullRequest(object):
     @property
     def lines_removed(self):
         return self.__lines_removed
+
+    @property
+    def description(self):
+        return self.__description
+
+    @property
+    def comments(self):
+        return self.__comments
+
+
+class PullRequestParticipant(object):
+
+    def __init__(self,  username=None,
+                 user_id=None, role=None, participated_on=None,
+                 approved=None):
+
+        self.__username = username
+        self.__user_id = user_id
+        self.__role = role
+        self.__participated_on = participated_on
+        self.__approved = approved
+
+
+    @property
+    def username(self):
+        return self.__username
+
+    @property
+    def user_id(self):
+        return self.__user_id
+
+    @property
+    def role(self):
+        return self.__role
+
+    @property
+    def participated_on(self):
+        return self.__participated_on
+
+    @property
+    def approved(self):
+        return self.__approved
+
 
 
 class Branch(object):
@@ -190,8 +237,48 @@ class Commit(object):
 
 
 class BuildDetails(object):
-    def __init__(self):
-        pass
+    def __init__(self,build_id, project_name, source_type, source_location,
+                 branch_name, commit_id, start_time, end_time):
+        self.__build_id = build_id
+        self.__project_name = project_name
+        self.__source_type = source_type
+        self.__source_location = source_location
+        self.__branch_name = branch_name
+        self.__commit_id = commit_id
+        self.__start_time = start_time
+        self.__end_time = end_time
+
+    @property
+    def build_id(self):
+        return self.__build_id
+
+    @property
+    def project_name(self):
+        return self.__project_name
+
+    @property
+    def source_type(self):
+        return self.__source_type
+
+    @property
+    def source_location(self):
+        return self.__source_location
+
+    @property
+    def branch_name(self):
+        return self.__branch_name
+
+    @property
+    def commit_id(self):
+        return self.__commit_id
+
+    @property
+    def start_time(self):
+        return self.__start_time
+
+    @property
+    def end_time(self):
+        return self.__end_time
 
 
 class Issue(object):
