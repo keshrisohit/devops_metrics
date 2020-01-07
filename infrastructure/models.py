@@ -91,8 +91,9 @@ class BranchDBModel(Base):
     __table_args__ = (UniqueConstraint('repository_url', 'name', name='branch_name_unique_key'),)
 
 
-class BuildDetailsModels(object):
+class BuildDetailsModels(Base):
     __tablename__ = "build_details"
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
     build_id = Column("build_id", VARCHAR(128), nullable=False)
     project_name = Column("project_name", VARCHAR(128), nullable=False)
     source_type = Column("source_type", VARCHAR(128), nullable=False)
@@ -117,4 +118,4 @@ class PullRequestParticipantDBModel(Base):
 
     pull_request_id = Column(Integer, ForeignKey('pull_request.id'))
 
-    __table_args__ = (UniqueConstraint('username', 'role', 'pull_request_id', name='participants_unique_key'),)
+
