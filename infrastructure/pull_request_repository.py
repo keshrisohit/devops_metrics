@@ -4,8 +4,8 @@ from infrastructure.base_repository import BaseRepository
 from infrastructure.data_mappers import branch_entites_to_model, commit_entites_to_model, \
     pull_request_entities_to_model, pull_request_particpants_entity_to_model, set_branch_db_from_entity, \
     set_commit_db_from_entity, set_pull_request_db_from_entity, set_pull_request_participant_db_from_entity
-from infrastructure.models import BranchDBModel, CommitDBModel, PullRequestBranchAssociationDBModel, \
-    PullRequestCommitAssociationDBModel, PullRequestDBModel, PullRequestParticipantDBModel
+from infrastructure.models import BranchDBModel, PullRequestBranchAssociationDBModel, \
+    PullRequestCommitAssociationDBModel, PullRequestDBModel
 
 
 class PullRequestRepository(BaseRepository):
@@ -20,37 +20,40 @@ class PullRequestRepository(BaseRepository):
     def update_pull_request(self, pull_request_db, pull_request):
 
         # update source and target branch
-        source_branch = self.session.query(BranchDBModel).filter(
-            BranchDBModel.name == pull_request.source_branch.branch_name).filter(
-            BranchDBModel.repository_url == pull_request.source_branch.repository_url).all()
-        target_branch = self.session.query(BranchDBModel).filter(
-            BranchDBModel.name == pull_request.target_branch.branch_name).filter(
-            BranchDBModel.repository_url == pull_request.target_branch.repository_url).all()
-        set_branch_db_from_entity(source_branch[0], pull_request.source_branch)
-        set_branch_db_from_entity(target_branch[0], pull_request.target_branch)
 
-        # update commits
+        for branch in pull_request_db.branches:
+            if branch.branch_type == "SOURCE":
+                set_branch_db_from_entity(branch.branch, pull_request.source_branch)
+            elif branch.branch_type == "TARGET":
+                set_branch_db_from_entity(branch.branch, pull_request.target_branch)
+
+        # Optimize this query
         for commit in pull_request.commits:
+            found = False
+            for pull_request_db_commit in pull_request_db.commits:
+                db_commit = pull_request_db_commit.commit
 
-            commit_db = self.session.query(CommitDBModel).filter(CommitDBModel.sha_id == commit.sha_id).filter(
-                CommitDBModel.repository_url == commit.repository_url).all()
+                if commit.repository_url == db_commit.repository_url and commit.sha_id == db_commit.sha_id:
+                    set_commit_db_from_entity(db_commit, commit)
+                    found = True
+                    # We can ignore this assuming commits data will not change it will be always incremental
+            if not found:
+                pull_request_commit_association = PullRequestCommitAssociationDBModel()
+                pull_request_commit_association.commit = commit_entites_to_model(commit)
+                pull_request.commits.append(pull_request_commit_association)
 
-            if len(commit_db) > 0:
-                set_commit_db_from_entity(commit_db[0], commit)
-            else:
-                pull_request_db[0].commits.append(commit_entites_to_model(commit))
 
-        for pull_request_participant in pull_request.participants:
-            pull_request_participant_db = self.session.query(PullRequestParticipantDBModel).filter(
-                PullRequestParticipantDBModel.role == pull_request_participant.role).filter(
-                PullRequestParticipantDBModel.username == pull_request_participant.user_id).filter(
-                PullRequestParticipantDBModel.pull_request_id == pull_request_db[0].id).all()
-            if len(pull_request_participant_db) > 0:
-                set_pull_request_participant_db_from_entity(pull_request_participant_db[0], pull_request_participant)
-            else:
-                pull_request_db[0].participants.append(pull_request_particpants_entity_to_model(pull_request_participant))
+        for participant in pull_request.participants:
+            for participant_db in pull_request_db.participants:
 
-        set_pull_request_db_from_entity(pull_request_db[0], pull_request, pull_request_db[0].row_created_at,
+                if participant_db.username == participant.user_id and participant_db.role == participant.role:
+                    found = True
+                    set_pull_request_participant_db_from_entity(participant_db, participant)
+
+            if not found:
+                pull_request_db.participants.append(pull_request_particpants_entity_to_model(participant))
+
+        set_pull_request_db_from_entity(pull_request_db, pull_request, pull_request_db.row_created_at,
                                         datetime.now())
 
     def create_pull_request(self, pull_request):
@@ -99,7 +102,7 @@ class PullRequestRepository(BaseRepository):
 
         if len(pull_requests_db) > 0:
             # update source and target branch
-            self.update_pull_request(pull_requests_db, pull_request)
+            self.update_pull_request(pull_requests_db[0], pull_request)
         else:
             self.create_pull_request(pull_request)
         self.session.commit()
