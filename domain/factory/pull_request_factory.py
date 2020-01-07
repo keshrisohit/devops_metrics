@@ -6,7 +6,7 @@ from domain.entities import Branch, Commit, PullRequest, PullRequestParticipant
 
 
 class PRStatus(Enum):
-    OPEN = "open"
+    OPEN = "OPENED"
     DECLINED = "DECLINED"
     MERGED = "MERGED"
 
