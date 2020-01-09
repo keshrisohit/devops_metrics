@@ -1,7 +1,5 @@
 import requests
 
-access_token=""
-
 
 class GithubClient(object):
     def __init__(self, access_token=None):

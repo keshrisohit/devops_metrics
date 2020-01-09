@@ -17,6 +17,9 @@ def make_response(status_code, body, headers):
 
 pull_request_repository = PullRequestRepository()
 
+# Use Github access token from config
+access_token = None
+
 
 def github_pull_request_service(event, context):
     try:
@@ -24,7 +27,7 @@ def github_pull_request_service(event, context):
 
         body = unquote(event['body'])
         pull_request_webhooh_payload = json.loads(body[8:])
-        github_client = GithubClient()
+        github_client = GithubClient(access_token)
         pull_request = GitHubPullRequestFactory(github_client).create_pull_request(pull_request_webhooh_payload)
         pull_request_repository.save_or_update_pull_request(pull_request)
         return make_response(200, "OK", {'Content-Type': 'application/json'})
