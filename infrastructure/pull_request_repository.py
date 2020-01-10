@@ -28,7 +28,7 @@ class PullRequestRepository(BaseRepository):
                 set_branch_db_from_entity(branch.branch, pull_request.target_branch)
 
         # Optimize this query
-        pull_request_commit_associations_db=[]
+        pull_request_commit_associations_db = []
         for commit in pull_request.commits:
             found = False
             for pull_request_db_commit in pull_request_db.commits:
