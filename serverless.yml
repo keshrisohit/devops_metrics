@@ -19,7 +19,7 @@ provider:
     name: snet-serverless-artifacts
     serverSideEncryption: AES256
     tags:
-      key1: registry
+      key1: dev-metrics
     deploymentPrefix: serverless
     tracing: true
   usagePlan: # Optional usage plan configuration
@@ -33,7 +33,7 @@ provider:
 
 custom:
   pythonRequirements:
-    fileName: requirement.txt
+    fileName: requirements.txt
     dockerizePip: true
     useDownloadCache: true
     useStaticCache: true

@@ -28,29 +28,31 @@ class PullRequestRepository(BaseRepository):
                 set_branch_db_from_entity(branch.branch, pull_request.target_branch)
 
         # Optimize this query
+        pull_request_commit_associations_db=[]
         for commit in pull_request.commits:
             found = False
             for pull_request_db_commit in pull_request_db.commits:
                 db_commit = pull_request_db_commit.commit
 
-                if commit.repository_url == db_commit.commit.repository_url and commit.sha_id == db_commit.sha_id:
+                if commit.repository_url == db_commit.repository_url and commit.sha_id == db_commit.sha_id:
                     set_commit_db_from_entity(db_commit, commit)
                     found = True
                     # We can ignore this assuming commits data will not change it will be always incremental
             if not found:
                 pull_request_commit_association = PullRequestCommitAssociationDBModel()
                 pull_request_commit_association.commit = commit_entites_to_model(commit)
-                pull_request.commits.append(pull_request_commit_association)
+                pull_request_commit_associations_db.append(pull_request_commit_association)
 
-
+            pull_request_db.commits.extend(pull_request_commit_associations_db)
+        found_participants = False
         for participant in pull_request.participants:
             for participant_db in pull_request_db.participants:
 
                 if participant_db.username == participant.user_id and participant_db.role == participant.role:
-                    found = True
+                    found_participants = True
                     set_pull_request_participant_db_from_entity(participant_db, participant)
 
-            if not found:
+            if not found_participants:
                 pull_request_db.participants.append(pull_request_particpants_entity_to_model(participant))
 
         set_pull_request_db_from_entity(pull_request_db, pull_request, pull_request_db.row_created_at,
