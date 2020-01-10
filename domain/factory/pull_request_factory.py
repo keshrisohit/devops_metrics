@@ -1,7 +1,5 @@
 from enum import Enum
 
-import requests
-
 from domain.entities import Branch, Commit, PullRequest, PullRequestParticipant
 
 
@@ -18,13 +16,12 @@ class EventFactory(object):
 
 class GitHubPullRequestFactory(EventFactory):
 
-
     def __init__(self, github_client):
         self.github_client = github_client
 
     def create_pull_request(self, event):
         repository_url = event["repository"]["html_url"]
-        pull_request_id = event["number"]
+        pull_request_id = event["pull_request"]["number"]
 
         source_branch = self.parse_branch(event["pull_request"]["head"])
         target_branch = self.parse_branch(event["pull_request"]["base"])
@@ -41,7 +38,7 @@ class GitHubPullRequestFactory(EventFactory):
         commits_url = event["pull_request"]["commits_url"]
 
         review_comments = event["pull_request"]["review_comments"]
-        comments=event["pull_request"]["comments"]
+        comments = event["pull_request"]["comments"]
         no_of_commits = event["pull_request"]["commits"]
         no_of_files_changed = event["pull_request"]["changed_files"]
         lines_added = event["pull_request"]["additions"]
@@ -51,7 +48,7 @@ class GitHubPullRequestFactory(EventFactory):
         # assigned, unassigned, review_requested, review_request_removed, labeled, unlabeled, opened, edited, closed, ready_for_review, locked, unlocked, or reopened. If the action is closed and the merged key is fals
 
         if action == "closed" and event["pull_request"]["merged"]:
-            action == PRStatus.MERGED.value
+            action = PRStatus.MERGED.value
         elif action == "closed":
             action = PRStatus.DECLINED.value
         else:
@@ -59,7 +56,7 @@ class GitHubPullRequestFactory(EventFactory):
 
         pull_request = PullRequest(repository_url, pull_request_id, commits, source_branch, target_branch, title,
                                    participants, sender_username, sender_id, action, commits_url, merged_at, created_at,
-                                   updated_at, closed_at, merge_commit_sha, review_comments, comments,no_of_commits,
+                                   updated_at, closed_at, merge_commit_sha, review_comments, comments, no_of_commits,
                                    no_of_files_changed, lines_added, lines_removed)
 
         return pull_request
