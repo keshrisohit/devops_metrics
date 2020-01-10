@@ -1,9 +1,10 @@
 import requests
+from config import BITBUCKET_CLIENT_ID, BITBUCKET_SECRET_KEY
 
 from domain.utils import get_access_token
 
-client_id = ''
-client_secret = ''
+client_id = BITBUCKET_CLIENT_ID
+client_secret = BITBUCKET_SECRET_KEY
 token_url = "https://bitbucket.org/site/oauth2/access_token"
 
 

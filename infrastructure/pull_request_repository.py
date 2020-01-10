@@ -33,7 +33,7 @@ class PullRequestRepository(BaseRepository):
             for pull_request_db_commit in pull_request_db.commits:
                 db_commit = pull_request_db_commit.commit
 
-                if commit.repository_url == db_commit.repository_url and commit.sha_id == db_commit.sha_id:
+                if commit.repository_url == db_commit.commit.repository_url and commit.sha_id == db_commit.sha_id:
                     set_commit_db_from_entity(db_commit, commit)
                     found = True
                     # We can ignore this assuming commits data will not change it will be always incremental
