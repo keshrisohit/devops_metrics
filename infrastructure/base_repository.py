@@ -1,13 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 
+from config import DB_URL
 from infrastructure.models import Base
 
 # sample DB_URL 'mysql+pymysql://unittest_root:unittest_pwd@localhost/dev_metrics'
 
 
-DB_URL = os.getenv('DB_URL', 'sqlite:///dev_metrics.db')
 engine = create_engine(DB_URL, echo=False)
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
