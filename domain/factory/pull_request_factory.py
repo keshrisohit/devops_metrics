@@ -36,8 +36,9 @@ class GitHubPullRequestFactory(EventFactory):
         closed_at = event["pull_request"]["closed_at"]
         merge_commit_sha = event["pull_request"]["merge_commit_sha"]
         commits_url = event["pull_request"]["commits_url"]
-
-        review_comments = event["pull_request"]["review_comments"]
+        review_comments = 0
+        if "review_comments" in event["pull_request"]:
+            review_comments = event["pull_request"]["review_comments"]
         comments = event["pull_request"]["comments"]
         no_of_commits = event["pull_request"]["commits"]
         no_of_files_changed = event["pull_request"]["changed_files"]
