@@ -20,7 +20,10 @@ def set_pull_request_db_from_entity(pull_request_db, pull_request, created_at, u
     pull_request_db.lines_removed = pull_request.lines_removed
     pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.no_of_commits = pull_request.no_of_commits
-    pull_request_db.no_of_review_comments = pull_request.review_comments
+    if pull_request.review_comments == 0:
+        pass
+    else:
+        pull_request_db.no_of_review_comments = pull_request.review_comments
     pull_request_db.no_of_comments = pull_request.comments
     pull_request_db.no_of_files_changed = pull_request.no_of_files_changed
     pull_request_db.merge_commit_sha = pull_request.merge_commit_sha
