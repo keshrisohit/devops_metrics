@@ -35,7 +35,7 @@ class PullRequestRepository(BaseRepository):
                 pull_request_commit_association.commit = commit_entites_to_model(commit)
                 pull_request_commit_associations_db.append(pull_request_commit_association)
 
-            pull_request_db.commits.extend(pull_request_commit_associations_db)
+        pull_request_db.commits.extend(pull_request_commit_associations_db)
         found_participants = False
         for participant in pull_request.participants:
             for participant_db in pull_request_db.participants:
