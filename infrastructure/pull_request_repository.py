@@ -3,7 +3,7 @@ from datetime import datetime
 from infrastructure.base_repository import BaseRepository
 from infrastructure.data_mappers import branch_entites_to_model, commit_entites_to_model, \
     pull_request_entities_to_model, pull_request_particpants_entity_to_model, set_branch_db_from_entity, \
-    set_commit_db_from_entity, set_pull_request_db_from_entity, set_pull_request_participant_db_from_entity
+    set_pull_request_db_from_entity, set_pull_request_participant_db_from_entity
 from infrastructure.models import BranchDBModel, PullRequestBranchAssociationDBModel, \
     PullRequestCommitAssociationDBModel, PullRequestDBModel
 
@@ -19,15 +19,6 @@ class PullRequestRepository(BaseRepository):
 
     def update_pull_request(self, pull_request_db, pull_request):
 
-        # update source and target branch
-
-        for branch in pull_request_db.branches:
-            if branch.branch_type == "SOURCE":
-                set_branch_db_from_entity(branch.branch, pull_request.source_branch)
-            elif branch.branch_type == "TARGET":
-                set_branch_db_from_entity(branch.branch, pull_request.target_branch)
-
-        # Optimize this query
         pull_request_commit_associations_db = []
         for commit in pull_request.commits:
             found = False
@@ -35,10 +26,11 @@ class PullRequestRepository(BaseRepository):
                 db_commit = pull_request_db_commit.commit
 
                 if commit.repository_url == db_commit.repository_url and commit.sha_id == db_commit.sha_id:
-                    set_commit_db_from_entity(db_commit, commit)
+                    # set_commit_db_from_entity(db_commit, commit)
                     found = True
                     # We can ignore this assuming commits data will not change it will be always incremental
             if not found:
+                print(f"found new commit {commit.sha_id}")
                 pull_request_commit_association = PullRequestCommitAssociationDBModel()
                 pull_request_commit_association.commit = commit_entites_to_model(commit)
                 pull_request_commit_associations_db.append(pull_request_commit_association)
@@ -59,6 +51,7 @@ class PullRequestRepository(BaseRepository):
                                         datetime.now())
 
     def create_pull_request(self, pull_request):
+
         pull_request_db = pull_request_entities_to_model(pull_request)
 
         source_branch = self.session.query(BranchDBModel).filter(

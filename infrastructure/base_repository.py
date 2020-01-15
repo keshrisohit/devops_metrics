@@ -15,7 +15,7 @@ Base.metadata.create_all(engine)
 class BaseRepository:
 
     def __init__(self):
-        self.session = Session()
+        self.session = Session(autoflush=False)
 
     def add_item(self, item):
         try:
