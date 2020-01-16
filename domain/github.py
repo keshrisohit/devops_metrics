@@ -11,11 +11,11 @@ class GithubClient(object):
             response = requests.get(commit_url,
                                     headers={
                                         'Authorization': 'Bearer {}'.format(
-                                            self.access_token)}).json()
+                                            self.access_token)}, timeout=10).json()
 
         else:
             try:
-                reposne = requests.get(commit_url).json()
+                reposne = requests.get(commit_url, timeout=10).json()
             except Exception as e:
                 raise e
 

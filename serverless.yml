@@ -12,14 +12,14 @@ provider:
   runtime: python3.6
   description: offchain information of organizations and services
   memorySize: 512
-  timeout: 30
+  timeout: 60
   region: ${file(./config.${self:provider.stage}.json):REGION}
   stage: ${opt:stage,'dev'}
   deploymentBucket:
     name: snet-serverless-artifacts
     serverSideEncryption: AES256
     tags:
-      key1: registry
+      key1: dev-metrics
     deploymentPrefix: serverless
     tracing: true
   usagePlan: # Optional usage plan configuration
@@ -35,9 +35,6 @@ custom:
   pythonRequirements:
     fileName: requirements.txt
     dockerizePip: true
-    useDownloadCache: true
-    useStaticCache: true
-    cacheLocation: "/var/cache/serverless"
   prune:
     automatic: true
     includeLayers: true
