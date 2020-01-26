@@ -3,7 +3,7 @@ import traceback
 from urllib.parse import unquote
 
 from application.utils import make_response
-from config import GITHUB_ACCCESS_TOKEN
+from config import GITHUB_ACCESS_TOKEN
 from domain.bitbucket import BitbucketClient
 from domain.factory.pull_request_factory import BitBucketEventFactory, GitHubPullRequestFactory
 from domain.github import GithubClient
@@ -12,7 +12,7 @@ from infrastructure.pull_request_repository import PullRequestRepository
 pull_request_repository = PullRequestRepository()
 
 # Use Github access token from config
-access_token = GITHUB_ACCCESS_TOKEN
+access_token = GITHUB_ACCESS_TOKEN
 
 
 def github_pull_request_service(event, context):
