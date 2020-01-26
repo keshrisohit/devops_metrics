@@ -129,16 +129,14 @@ class PullRequest(object):
 
 class PullRequestParticipant(object):
 
-    def __init__(self,  username=None,
+    def __init__(self, username=None,
                  user_id=None, role=None, participated_on=None,
                  approved=None):
-
         self.__username = username
         self.__user_id = user_id
         self.__role = role
         self.__participated_on = participated_on
         self.__approved = approved
-
 
     @property
     def username(self):
@@ -159,7 +157,6 @@ class PullRequestParticipant(object):
     @property
     def approved(self):
         return self.__approved
-
 
 
 class Branch(object):
@@ -237,8 +234,8 @@ class Commit(object):
 
 
 class BuildDetails(object):
-    def __init__(self,build_id, project_name, source_type, source_location,
-                 branch_name, commit_id, start_time, end_time):
+    def __init__(self, build_id, project_name, source_type, source_location,
+                 branch_name, commit_id, start_time, end_time, status):
         self.__build_id = build_id
         self.__project_name = project_name
         self.__source_type = source_type
@@ -247,6 +244,7 @@ class BuildDetails(object):
         self.__commit_id = commit_id
         self.__start_time = start_time
         self.__end_time = end_time
+        self.__status = status
 
     @property
     def build_id(self):
@@ -280,12 +278,45 @@ class BuildDetails(object):
     def end_time(self):
         return self.__end_time
 
+    @property
+    def status(self):
+        return self.__status
+
 
 class Issue(object):
-    def __init__(self):
-        self.__start_time = ""
-        self.__end_time = ""
-        self.__title = ""
-        self.__description = ""
-        self.__sev = ""
-        self.__reported_by = ""
+    def __init__(self, issue_id,start_time, end_time, title, description, sev, reported_by):
+        self.__issue_id=issue_id
+        self.__start_time = start_time
+        self.__end_time = end_time
+        self.__title = title
+        self.__description = description
+        self.__sev = sev
+        self.__reported_by = reported_by
+
+    @property
+    def start_time(self):
+        return self.__start_time
+
+    @property
+    def end_time(self):
+        return self.__end_time
+
+    @property
+    def title(self):
+        return self.__title
+
+    @property
+    def description(self):
+        return self.__description
+
+    @property
+    def sev(self):
+        return self.__sev
+
+    @property
+    def reported_by(self):
+        return self.__reported_by
+
+    @property
+    def issue_id(self):
+        return self.__issue_id

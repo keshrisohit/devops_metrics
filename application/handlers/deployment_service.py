@@ -3,14 +3,12 @@ import traceback
 
 import boto3
 
-from domain.factory.deployment_factory import CodeBuildFactory
+from application.utils import make_response
+from domain.factory.deployment_factory import BudilDetailRequestFactory, CodeBuildFactory
 from infrastructure.deployment_repository import DeploymentRepository
 
 deployment_repository = DeploymentRepository()
 
-
-
-#TODO vinay to add testcases for code build service
 
 def codebuild_service(event, context):
     client = boto3.client('codebuild')
@@ -23,3 +21,9 @@ def codebuild_service(event, context):
     except Exception as e:
         traceback.print_exc()
         raise e
+
+
+def build_detail_service(event, context):
+    build_details = BudilDetailRequestFactory().create_build_details(json.loads(event['body']))
+    deployment_repository.save_build_metrics(build_details)
+    return make_response(200, "OK", {'Content-Type': 'application/json'})

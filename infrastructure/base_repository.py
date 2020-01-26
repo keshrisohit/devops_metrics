@@ -10,12 +10,12 @@ from infrastructure.models import Base
 engine = create_engine(DB_URL, echo=False)
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
-
+default_session=Session(autoflush=False)
 
 class BaseRepository:
 
     def __init__(self):
-        self.session = Session(autoflush=False)
+        self.session = default_session
 
     def add_item(self, item):
         try:

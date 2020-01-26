@@ -100,8 +100,9 @@ class BuildDetailsModels(Base):
     source_location = Column("source_location", VARCHAR(128), nullable=True)
     branch_name = Column("branch_name", VARCHAR(128), nullable=True)
     commit_id = Column("commit_id", VARCHAR(256), nullable=True)
-    start_time = Column("start_time", VARCHAR(128), nullable=False)
-    end_time = Column("end_time", VARCHAR(128), nullable=False)
+    start_time = Column("start_time", TIMESTAMP(timezone=False), nullable=False)
+    end_time = Column("end_time", TIMESTAMP(timezone=False), nullable=False)
+    status = Column("status", VARCHAR(128))
 
     __table_args__ = (UniqueConstraint('build_id', 'project_name', 'source_type', name='build_details_unique_key'),)
 
@@ -115,7 +116,18 @@ class PullRequestParticipantDBModel(Base):
     participated_on = Column('participated_on', TIMESTAMP(timezone=False),
                              nullable=True)  # if patricipated in PR review
     approved = Column('approved', BOOLEAN)  # true  if PR is approved
-
     pull_request_id = Column(Integer, ForeignKey('pull_request.id'))
 
 
+class Issues(Base):
+    __tablename__ = "issues"
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    issue_id = Column('issue_id', String)
+    title = Column('title', String)
+    description = Column('description', String)
+    reported_by = Column('reported_by', String)
+    sev = Column('sev', String)
+    start_time = Column('start_time', TIMESTAMP(timezone=False))
+
+
+    end_time = Column('end_time', TIMESTAMP(timezone=False))

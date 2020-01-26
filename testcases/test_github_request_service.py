@@ -6,7 +6,7 @@ from domain.github import GithubClient
 from infrastructure.pull_request_repository import PullRequestRepository
 
 
-class TestOrganizationService(unittest.TestCase):
+class TestPullRequestService(unittest.TestCase):
 
     def setUp(self):
         self.pull_request_repo = PullRequestRepository()
@@ -1177,7 +1177,6 @@ class TestOrganizationService(unittest.TestCase):
         pull_request_db = self.pull_request_repo.get_pull_requests(pull_request.pull_request_id,
                                                                    pull_request.repository_url)
 
-        # TODO Add more assertions and mock commit url call
         assert pull_request_db[0].action == 'MERGED'
         assert pull_request_db[0].branches[0].branch.name == 'changes'
         assert len(pull_request_db[0].branches) == 2

@@ -7,7 +7,7 @@ class GithubClient(object):
 
     def get_commits(self, commit_url):
         # curl 'https://api.github.com/users/whatever?client_id=xxxx&client_secret=yyyy'
-        if self.access_token:
+        if self.access_token and len(self.access_token)>0:
             response = requests.get(commit_url,
                                     headers={
                                         'Authorization': 'Bearer {}'.format(
