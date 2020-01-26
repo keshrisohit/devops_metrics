@@ -12,9 +12,9 @@ merge_commit_sha  column from pull_request  will be commit_id in build_details t
 ![Alt text](db_schema.png?raw=true "Title")
 
 
-###Setup details 
+### Setup details 
 
-#####If you want to deploy on AWS lambda and api gateway 
+##### If you want to deploy on AWS lambda and api gateway 
 
 Setup your config in config.py or set it in envoirnment variable
 
@@ -38,7 +38,7 @@ Run ```serverless deploy``` to deploy
 
 
 
-#####If you want torun it as docker container 
+##### If you want torun it as docker container 
 
 ```docker build . -t devops_metrics:latest```
 
@@ -53,13 +53,15 @@ docker run -d  -p 5000:5000 \
 devops_metrics:latest
 ```
 
-After deployment add the belwo  urls as a webhook for all the pull_request_event
+After deployment add the below  urls as a webhook for all the pull_request_event
 ```
 host:port/pull_request/bitbucket for bitbucket
 host:port/pull_request/github for github
 ```
 
-details of APIs to push data
+##### Details of APIs to push data
+
+
 ```
 <host>:port/issue  to post issue data
 { 
@@ -89,13 +91,13 @@ host:port/build_detail  to post deployment build detail data
 
 
 
-#####How to get access token and add webhook for github?
+##### How to get access token and add webhook for github?
 https://developer.github.com/webhooks/creating/#setting-up-a-webhook
 
 https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
 
 
-#####How to get client id and secrete key   and add webhook for bitbucket?
+##### How to get client id and secrete key   and add webhook for bitbucket?
 https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html
 
 https://vssue.js.org/guide/bitbucket.html
@@ -104,4 +106,4 @@ https://vssue.js.org/guide/bitbucket.html
 
 Coming soon queries to measure and compare all the metrics
 
-####Work in progress.....
+#### Work in progress.....
