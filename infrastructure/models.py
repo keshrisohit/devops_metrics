@@ -102,7 +102,7 @@ class BuildDetailsModels(Base):
     commit_id = Column("commit_id", VARCHAR(256), nullable=True)
     start_time = Column("start_time", TIMESTAMP(timezone=False), nullable=False)
     end_time = Column("end_time", TIMESTAMP(timezone=False), nullable=False)
-    status = Column("status", VARCHAR(128))
+    status = Column("status", VARCHAR(128),nullable=True)
 
     __table_args__ = (UniqueConstraint('build_id', 'project_name', 'source_type', name='build_details_unique_key'),)
 
@@ -122,8 +122,8 @@ class PullRequestParticipantDBModel(Base):
 class Issues(Base):
     __tablename__ = "issues"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    issue_id = Column('issue_id', String)
-    title = Column('title', String)
+    issue_id = Column('issue_id', VARCHAR(128))
+    title = Column('title', VARCHAR(128))
     description = Column('description', String)
     reported_by = Column('reported_by', String)
     sev = Column('sev', String)
