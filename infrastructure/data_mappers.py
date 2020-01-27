@@ -2,7 +2,7 @@ from datetime import datetime
 
 import iso8601
 
-from infrastructure.models import BranchDBModel, BuildDetailsModels, CommitDBModel, PullRequestDBModel, \
+from infrastructure.models import BranchDBModel, BuildDetailsModels, CommitDBModel, Issues, PullRequestDBModel, \
     PullRequestParticipantDBModel
 
 
@@ -93,8 +93,9 @@ def set_build_metrics_db_from_entity(build_details, build_metrics):
     build_details.source_location = build_metrics.source_location
     build_details.branch_name = build_metrics.branch_name
     build_details.commit_id = build_metrics.commit_id
-    build_details.start_time = build_metrics.start_time
-    build_details.end_time = build_metrics.end_time
+    build_details.start_time = string_to_datetime(build_metrics.start_time)
+    build_details.end_time = string_to_datetime(build_metrics.end_time)
+    build_details.status = build_metrics.status
 
 
 def build_details_entities_to_model(build_metrics):
@@ -118,3 +119,17 @@ def pull_request_particpants_entity_to_model(pull_request_participant):
     set_pull_request_participant_db_from_entity(pull_request_participant_db, pull_request_participant)
 
     return pull_request_participant_db
+
+
+def issue_db_from_entity(issue):
+    issue_db = Issues()
+    issue_db.issue_id = issue.issue_id
+    issue_db.title = issue.title
+    issue_db.description = issue.description
+    issue_db.reported_by = issue.reported_by
+    issue_db.sev = issue.sev
+    issue_db.start_time = string_to_datetime(issue.start_time)
+
+    issue_db.end_time = string_to_datetime(issue.end_time)
+
+    return issue_db

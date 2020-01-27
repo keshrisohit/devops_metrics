@@ -19,6 +19,7 @@ class PullRequestRepository(BaseRepository):
 
     def update_pull_request(self, pull_request_db, pull_request):
 
+        # update source and target branch
         pull_request_commit_associations_db = []
         for commit in pull_request.commits:
             found = False
