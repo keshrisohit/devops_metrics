@@ -110,9 +110,9 @@ class BuildDetailsModels(Base):
 class PullRequestParticipantDBModel(Base):
     __tablename__ = "pull_request_participant"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    username = Column('username', String)
-    display_name = Column('display_name', String)
-    role = Column('role', String)
+    username = Column('username', VARCHAR(128))
+    display_name = Column('display_name', VARCHAR(128))
+    role = Column('role', VARCHAR(128))
     participated_on = Column('participated_on', TIMESTAMP(timezone=False),
                              nullable=True)  # if patricipated in PR review
     approved = Column('approved', BOOLEAN)  # true  if PR is approved
@@ -124,9 +124,9 @@ class Issues(Base):
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     issue_id = Column('issue_id', VARCHAR(128))
     title = Column('title', VARCHAR(128))
-    description = Column('description', String)
-    reported_by = Column('reported_by', String)
-    sev = Column('sev', String)
+    description = Column('description', VARCHAR(256))
+    reported_by = Column('reported_by', VARCHAR(128))
+    sev = Column('sev', VARCHAR(128))
     start_time = Column('start_time', TIMESTAMP(timezone=False))
 
 
