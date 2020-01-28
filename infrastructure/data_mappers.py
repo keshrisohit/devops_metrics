@@ -93,8 +93,8 @@ def set_build_metrics_db_from_entity(build_details, build_metrics):
     build_details.source_location = build_metrics.source_location
     build_details.branch_name = build_metrics.branch_name
     build_details.commit_id = build_metrics.commit_id
-    build_details.start_time = string_to_datetime(build_metrics.start_time)
-    build_details.end_time = string_to_datetime(build_metrics.end_time)
+    build_details.start_time = build_metrics.start_time
+    build_details.end_time = build_metrics.end_time
     build_details.status = build_metrics.status
 
 

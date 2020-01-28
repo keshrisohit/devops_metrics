@@ -13,9 +13,9 @@ deployment_repository = DeploymentRepository()
 def codebuild_service(event, context):
     client = boto3.client('codebuild')
     try:
-        print(event)
         build_id = event.get('detail', {}).get('build-id')
         build_info = client.batch_get_builds(ids=[build_id])
+        print(build_info)
         build_metrics = CodeBuildFactory().create_build_details(build_info)
         deployment_repository.save_build_metrics(build_metrics)
     except Exception as e:
