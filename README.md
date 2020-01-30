@@ -238,6 +238,8 @@ Sample dashboard
 
 
 
-#### Work in progress.....
+
 
 ![Alt text](sample_dashboard.png?raw=true "Title")
+
+#### Work in progress.....
