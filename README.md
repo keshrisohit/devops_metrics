@@ -114,12 +114,9 @@ https://vssue.js.org/guide/bitbucket.html
 
 
 
-Coming soon queries to measure and compare all the metrics
-
-
 All the queries will pull data for last 30 days
 
-Get Lead Time
+##### Lead time
 
 Get all commits for merged pull_request, where target branch is master.
 Build details deployment commit id should be same as merge_commit_sha in pull_request
@@ -144,7 +141,7 @@ group by pr.merged_at,pr.repository_url
 ````
 
 
-
+##### Lead time if you consider meregd to master as deployemnt
 Lets say you dont have build details and if you depploy your code after merge to master, we can get approx lead time assuming PR merged_at as deployemnt time 
 
 ```
@@ -164,7 +161,7 @@ Lets say you dont have build details and if you depploy your code after merge to
  and pr.merged_at > NOW() - INTERVAL 30 DAY
 ```
 
-Deployment frequency if you have build_deatils
+##### Deployment frequency if you have build_deatils
 ```
 select bd.project_name as service ,count(*) as deployment_frequency ,week(bd.start_time)  
 from build_details  bd
@@ -172,7 +169,7 @@ where bd.end_time > NOW() - INTERVAL 30 DAY
 group by week(bd.start_time),bd.project_name;
 ```
 
-Deployemnt frequency if you consider merege to master as deployemnt
+##### Deployemnt frequency if you consider meregd to master as deployemnt
 
 ```
 select count(*) deployment_frequency,week(pr.merged_at), pr.repository_url as repository_url from 
@@ -188,7 +185,7 @@ and pr.merged_at > NOW() - INTERVAL 30 DAY
 group by week(pr.merged_at),pr.repository_url
 ```
 
-Mean Time to Recover
+##### Mean Time to Recover
 Select sev types which means service unavailable /un usable
 ```
 
@@ -196,7 +193,7 @@ select avg(timestampdiff(minute,start_time,end_time)) mttr from issues
 where sev=''
 
 ```
-No of review comments.
+##### No of review comments.
 ```
 select  pr.repository_url,week(pr.merged_at) ,coalesce(sum(pr.no_of_review_comments),0)+coalesce(sum(pr.no_of_comments),0) as comments  
 from pull_request pr 
@@ -205,7 +202,7 @@ and pr.merged_at > NOW() - INTERVAL 30 DAY
 group by week(pr.merged_at) ,pr.repository_url
 ```
 
-No of lines changed per repository 
+##### No of lines changed per repository 
 ```
 select  pr.repository_url,week(pr.merged_at) ,COALESCE(SUM(pr.lines_added),0)+COALESCE(SUM(pr.lines_removed),0)
 from pull_request pr 
@@ -215,7 +212,7 @@ group by week(pr.merged_at) ,pr.repository_url
 
 ```
 
-NO fo commits per repositroy
+##### No fo commits per repositroy
 
 ```
 select count(*), week(c.time),repository_url 
@@ -225,7 +222,7 @@ group by repository_url ,week(c.time);
 
 ```
 
-Deployment Time per repository
+##### Deployment Time per repository
 
 ```
 select project_name,avg(TIMESTAMPDIFF(second,start_time,end_time)) as deployment_time ,week(start_time)   
