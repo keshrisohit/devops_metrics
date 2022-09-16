@@ -3,7 +3,7 @@ certifi==2019.11.28
 chardet==3.0.4
 idna==2.8
 iso8601==0.1.12
-Mako==1.1.0
+Mako==1.2.2
 MarkupSafe==1.1.1
 PyMySQL==0.9.3
 python-dateutil==2.8.1
